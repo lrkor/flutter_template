@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_template/page/layout.dart';
+
+import './router.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,17 +13,25 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter template1',
-      home:  Scaffold(
-        appBar: AppBar(
-          title: const Text('Flutter templat2e'),
-        ),
-        body: const Center(
-          child: Text('Flutter template2')
-        ),
-      )
+      title: 'Flutter template',
+      initialRoute: '/',
+      home: const Layout(),
+      onGenerateRoute: (RouteSettings setting) {
+        final builder = routes[setting.name];
+        return MaterialPageRoute(
+          settings: RouteSettings(
+            name: setting.name,
+            arguments: setting.arguments,
+          ),
+          builder: (context) =>
+              builder?.call(context, setting.arguments) ??
+              const Scaffold(
+                body: Center(
+                  child: Text('404'),
+                ),
+              ),
+        );
+      },
     );
   }
 }
-
-
